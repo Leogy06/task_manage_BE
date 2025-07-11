@@ -10,12 +10,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/api", (req, res) => {
-  res.send("Hello World!");
+  res.send({ message: "Hello World!" });
 });
 
 app.use("/api/auth", authRoutes);
 
-// this should be after to catch errors
+// this should be after al routes to catch errors
 app.use(errorHandler);
 
 export default app;

@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { login } from "../controllers/auth.js";
+import { checkTokenValidityController, login } from "../controllers/auth.js";
 
 const authRoutes = Router();
 
+//login
 authRoutes.post("/login", login);
+
+//check if expired
+authRoutes.get("/checkValidity", checkTokenValidityController);
 
 export default authRoutes;

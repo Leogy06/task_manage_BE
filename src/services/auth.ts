@@ -1,4 +1,4 @@
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { NotFound, ValidationError } from "../utils/errorHandler.js";
 import "../config/environment.js";
 
@@ -13,10 +13,10 @@ export const loginService = ({ username, password }: UserTypes) => {
   }
 };
 
-export const checkUserValidity = (token: string) => {
+export const checkTokenValidityService = (token: string) => {
   if (!token) throw new NotFound("Token not found. Please login again.");
 
-  const decodedToken = verify(token, process.env.JWT_SECRET as string);
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
 
   if (
     !decodedToken ||
@@ -26,5 +26,5 @@ export const checkUserValidity = (token: string) => {
     throw new ValidationError("Invalid token, please login again.");
   }
 
-  return decodedToken;
+  return { loggedIn: true };
 };
