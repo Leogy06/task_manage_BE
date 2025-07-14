@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model budgets {
+  category_id        Int
+  id                 Int                @id
+  user_id            Int
+  budget_amount      Decimal            @db.Decimal(10, 2)
+  created_at         DateTime?          @default(dbgenerated("(curdate())")) @db.Date
+  month_year         DateTime           @db.Date
+  expense_categories expense_categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_budgets_expense_categories")
+  users              users              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_budgets_user")
+
+  @@index([category_id], map: "fk_budgets_expense_categories")
+  @@index([user_id], map: "fk_budgets_user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model expense_categories {
+  id       Int        @id
+  user_id  Int?
+  name     String     @db.VarChar(50)
+  budgets  budgets[]
+  users    users?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_expense_categories_user")
+  expenses expenses[]
+
+  @@index([user_id], map: "fk_expense_categories_user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model expenses {
+  id                 Int                @id
+  amount             Decimal            @db.Decimal(10, 2)
+  category_id        Int
+  title              String?            @db.VarChar(100)
+  date               DateTime           @db.Date
+  notes              String?            @db.Text
+  created_at         DateTime?          @default(dbgenerated("(curdate())")) @db.Date
+  user_id            Int
+  expense_categories expense_categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_expenses_expense_categories")
+
+  @@index([category_id], map: "fk_expenses_expense_categories")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model income {
+  id      Int      @id
+  user_id Int
+  source  String?  @db.VarChar(36)
+  amount  Decimal  @db.Decimal(10, 2)
+  date    DateTime @db.Date
+  notes   String?  @db.Text
+  users   users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_income_user")
+
+  @@index([user_id], map: "fk_income_user")
+}
+
+model savings_goals {
+  id             Int       @id
+  user_id        Int
+  goal_name      String?   @db.VarChar(100)
+  target_amount  Decimal   @db.Decimal(10, 2)
+  current_amount Decimal   @db.Decimal(10, 2)
+  deadline       DateTime  @db.Date
+  created_at     DateTime? @default(dbgenerated("(curdate())")) @db.Date
+  users          users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_savings_goals_user")
+
+  @@index([user_id], map: "fk_savings_goals_user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model users {
+  id                 Int                  @id @default(autoincrement())
+  given_name         String               @db.VarChar(36)
+  family_name        String               @db.VarChar(36)
+  middle_name        String?              @db.VarChar(36)
+  suffix             String?              @db.VarChar(10)
+  username           String               @unique() @db.VarChar(36)
+  password           String               @db.VarChar(36)
+  budgets            budgets[]
+  expense_categories expense_categories[]
+  income             income[]
+  savings_goals      savings_goals[]
+}

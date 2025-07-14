@@ -11,6 +11,10 @@ export const loginService = ({ username, password }: UserTypes) => {
   if (!username || !password) {
     return { message: " Required fields are empty." };
   }
+
+  const userDetails = { userid: 1, username: "John", password: "123123" };
+
+  return userDetails;
 };
 
 export const checkTokenValidityService = (token: string) => {

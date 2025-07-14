@@ -18,7 +18,7 @@ export const requireAuth = async (
     }
 
     const decoded = verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    req.user = decoded.id;
+    req.user = decoded;
 
     next();
   } catch (error) {
