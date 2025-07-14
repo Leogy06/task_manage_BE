@@ -14,6 +14,7 @@ export const createUserService = async ({
   username,
   password,
 }: ValidatedUser) => {
+  //validate
   const validatedUser = createUserSchema.safeParse({
     given_name,
     family_name,
@@ -23,6 +24,7 @@ export const createUserService = async ({
     password,
   });
 
+  //certain condition
   if (!validatedUser.success) {
     throw validatedUser.error;
   }
