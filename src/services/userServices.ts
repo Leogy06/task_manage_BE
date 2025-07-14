@@ -24,7 +24,7 @@ export const createUserService = async ({
   });
 
   if (!validatedUser.success) {
-    throw new ValidationError("Invalid data.");
+    throw validatedUser.error;
   }
 
   const hashed = await hashedPassword(validatedUser.data?.password as string);

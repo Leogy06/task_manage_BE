@@ -14,3 +14,10 @@ export const createUserSchema = z.object({
     .min(8, "Pasword must be atleast 8 characters")
     .max(36, "Password must not exceed by 36 characters."),
 });
+
+export type ValidatedUserSchema = z.infer<typeof createUserSchema>;
+
+export const loginUserSchema = z.object({
+  username: z.string().nonempty("Username is required."),
+  password: z.string().nonempty("Password is required."),
+});

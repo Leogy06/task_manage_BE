@@ -51,7 +51,7 @@ model expenses {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model income {
-  id      Int      @id
+  id      Int      @id @default(autoincrement())
   user_id Int
   source  String?  @db.VarChar(36)
   amount  Decimal  @db.Decimal(10, 2)
@@ -83,7 +83,7 @@ model users {
   middle_name        String?              @db.VarChar(36)
   suffix             String?              @db.VarChar(10)
   username           String               @unique() @db.VarChar(36)
-  password           String               @db.VarChar(36)
+  password           String               @db.VarChar(100)
   budgets            budgets[]
   expense_categories expense_categories[]
   income             income[]

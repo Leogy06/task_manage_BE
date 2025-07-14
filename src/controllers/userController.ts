@@ -7,7 +7,6 @@ export const createUserController = async (
   next: NextFunction
 ) => {
   try {
-    log;
     await createUserService(req.body);
 
     res.status(201).send("User has been created successfully!");
