@@ -1,14 +1,19 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
+import cors from "cors";
 
 // routes
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
 import { requireAuth } from "./middlewares/auth.js";
+import corsConfig from "./config/corsConfig.js";
 
 const app = express();
+
+//cors
+app.use(cors(corsConfig));
 
 app.use(express.json());
 
