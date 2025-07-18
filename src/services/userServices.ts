@@ -2,7 +2,6 @@ import { createUserSchema } from "../validations/userValidation.js";
 import prisma from "../config/prismaConfig.js";
 import { hashedPassword } from "../utils/hashPasswords.js";
 import { z } from "zod";
-import { ValidationError } from "../utils/errorHandler.js";
 
 type ValidatedUser = z.infer<typeof createUserSchema>;
 

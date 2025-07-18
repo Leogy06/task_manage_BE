@@ -28,7 +28,7 @@ export const login = async (
   }
 };
 
-export const checkTokenValidityController = (
+export const checkTokenValidityController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -40,6 +40,7 @@ export const checkTokenValidityController = (
     res.status(200).json({
       message: "User logged in.",
       loggedIn: isTokenValid.loggedIn,
+      decodedToken: isTokenValid.decodedToken
     });
   } catch (error) {
     next(error);

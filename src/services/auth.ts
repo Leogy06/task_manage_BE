@@ -54,10 +54,10 @@ export const checkTokenValidityService = (token: string) => {
   if (
     !decodedToken ||
     typeof decodedToken !== "object" ||
-    !("username" in decodedToken)
+    !("userId" in decodedToken)
   ) {
     throw new ValidationError("Invalid token, please login again.");
   }
 
-  return { loggedIn: true };
+  return { loggedIn: true, decodedToken };
 };
