@@ -1,4 +1,5 @@
 import prisma from "../config/prismaConfig.js";
+import { ValidationError } from "../utils/errorHandler.js";
 import { hashPassword } from "../utils/hasPassword.js";
 import {
   CreateUserInput,
@@ -10,6 +11,15 @@ export const createUserService = async (data: CreateUserInput) => {
   if (!validatedData.success) {
     throw validatedData.error;
   }
+
+  //check if username already taken
+  const isUsernameTaken = await prisma.users.findUnique({
+    where: {
+      username: validatedData.data.username,
+    },
+  });
+
+  if (isUsernameTaken) throw new ValidationError("Username has already taken.");
 
   const newUser = await prisma.users.create({
     data: {
