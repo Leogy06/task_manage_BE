@@ -11,12 +11,10 @@ export const createUserService = async (data: CreateUserInput) => {
     throw validatedData.error;
   }
 
-  const { password, ...rest } = validatedData.data;
-
   const newUser = await prisma.users.create({
     data: {
-      ...rest,
-      ...(password && { password: await hashPassword(password) }),
+      ...validatedData.data,
+      password: await hashPassword(validatedData.data.password),
     },
   });
 
