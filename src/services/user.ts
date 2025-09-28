@@ -30,3 +30,22 @@ export const createUserService = async (data: CreateUserInput) => {
 
   return newUser;
 };
+
+export const checkUsernameService = async (username: string) => {
+  const user = await prisma.users.findUnique({
+    where: {
+      username,
+    },
+  });
+
+  if (user) {
+    return {
+      message: "Username is already taken.",
+      exist: true,
+    };
+  }
+  return {
+    exist: false,
+    message: "Username is available.",
+  };
+};
