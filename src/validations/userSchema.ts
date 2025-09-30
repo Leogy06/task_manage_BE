@@ -13,3 +13,11 @@ export const createUserSchema = z.object({
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
+
+//user login validation schema
+export const userLoginValidationSchema = z.object({
+  username: z.string().min(1, "Username is required."),
+  password: z.string().min(1, "Password is required."),
+});
+
+export type UserLoginInput = z.infer<typeof createUserSchema>;

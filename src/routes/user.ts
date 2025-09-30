@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { checkUsername, createUser } from "../controllers/user.js";
+import {
+  checkUsername,
+  createUser,
+  loggingInUser,
+} from "../controllers/user.js";
 
 const userRoutes = Router();
 
@@ -8,5 +12,8 @@ userRoutes.post("/", createUser);
 
 //check username availability
 userRoutes.get("/check-username/:username", checkUsername);
+
+//login user
+userRoutes.post("/login", loggingInUser);
 
 export default userRoutes;
