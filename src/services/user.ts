@@ -9,7 +9,10 @@ import {
 } from "../validations/userSchema.js";
 
 import jwt from "jsonwebtoken";
+
+// * env
 import "../config/environment.js";
+import { RequestUserType } from "../types/request.js";
 
 export const createUserService = async (data: CreateUserInput) => {
   const validatedData = createUserSchema.safeParse(data);
@@ -85,6 +88,7 @@ export const userLogin = async (
   const token = jwt.sign(
     {
       id: loggedInUser.id,
+      username: loggedInUser.username,
     },
     process.env.JWT_SECRET!,
     {
@@ -93,4 +97,32 @@ export const userLogin = async (
   );
 
   return { token };
+};
+
+// ? require user auth
+export const requireUserAuthService = async (userToken: string) => {
+  if (!userToken) throw new NotFound("No token was found.");
+
+  const isTokenValid = jwt.verify(
+    userToken,
+    process.env.JWT_SECRET!
+  ) as RequestUserType;
+
+  if (!isTokenValid) throw new ValidationError("Token is invalid");
+
+  return {
+    isTokenValid: true,
+    user: isTokenValid,
+  };
+};
+
+// * check user
+export const checkUserService = (userToken: string) => {
+  if (!userToken) throw new NotFound("Token not found.");
+
+  const decoded = jwt.verify(userToken, process.env.SECRET_TOKEN!, (err) => {
+    if (err) throw new ValidationError("User token was invalid.");
+  });
+
+  return { decoded };
 };

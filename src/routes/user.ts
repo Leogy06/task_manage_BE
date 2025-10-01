@@ -3,6 +3,7 @@ import {
   checkUsername,
   createUser,
   loggingInUser,
+  loggingOutUser,
 } from "../controllers/user.js";
 
 const userRoutes = Router();
@@ -15,5 +16,10 @@ userRoutes.get("/check-username/:username", checkUsername);
 
 //login user
 userRoutes.post("/login", loggingInUser);
+
+//logout user
+userRoutes.post("/logout", loggingOutUser);
+
+//check user
 
 export default userRoutes;

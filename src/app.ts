@@ -7,6 +7,7 @@ import corsConfig from "./config/corsConfig.js";
 
 // routes
 import userRoutes from "./routes/user.js";
+import requireUserAuthMiddleWare from "./middlewares/requireUserAuth.js";
 
 const app = express();
 
@@ -17,13 +18,13 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.get("/api", (req, res) => {
+app.get("/api", requireUserAuthMiddleWare, (req, res) => {
   res.send("Hello!");
 });
 
 app.use("/api/users", userRoutes);
 
-// this should be after al routes to catch errors
+// this should be after all routes to catch errors
 app.use(errorHandler);
 
 export default app;

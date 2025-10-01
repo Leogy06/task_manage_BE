@@ -1,9 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import {
   checkUsernameService,
+  checkUserService,
   createUserService,
   userLogin,
 } from "../services/user.js";
+
+// * jwt
+import jwt from "jsonwebtoken";
+
+// env
+import "../config/environment.js";
+import { NewRequest } from "../types/request.js";
+import { ValidationError } from "../utils/errorHandler.js";
 
 export const createUser = async (
   req: Request,
@@ -18,6 +27,7 @@ export const createUser = async (
   }
 };
 
+// ? avoids username duplication in forms
 //validation for username availability
 export const checkUsername = async (
   req: Request,
@@ -51,6 +61,25 @@ export const loggingInUser = async (
     res.status(200).json({
       message: "Login Successfully",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ? logout user
+export const loggingOutUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: true,
+    });
+
+    res.status(200).json({ message: "User logged out successfully." });
   } catch (error) {
     next(error);
   }
