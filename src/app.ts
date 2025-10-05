@@ -8,6 +8,7 @@ import corsConfig from "./config/corsConfig.js";
 // routes
 import userRoutes from "./routes/user.js";
 import requireUserAuthMiddleWare from "./middlewares/requireUserAuth.js";
+import taskCategoriesRoutes from "./routes/taskCategoriesRoutes.js";
 
 const app = express();
 
@@ -23,6 +24,12 @@ app.get("/api", requireUserAuthMiddleWare, (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+
+app.use(
+  "/api/task-categories",
+  requireUserAuthMiddleWare,
+  taskCategoriesRoutes
+);
 
 // this should be after all routes to catch errors
 app.use(errorHandler);

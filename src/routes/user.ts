@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  checkUserController,
   checkUsername,
   createUser,
   loggingInUser,
@@ -12,6 +13,7 @@ const userRoutes = Router();
 userRoutes.post("/", createUser);
 
 //check username availability
+// * this is for creat new account
 userRoutes.get("/check-username/:username", checkUsername);
 
 //login user
@@ -21,5 +23,6 @@ userRoutes.post("/login", loggingInUser);
 userRoutes.post("/logout", loggingOutUser);
 
 //check user
+userRoutes.get("/auth/check", checkUserController);
 
 export default userRoutes;

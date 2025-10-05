@@ -13,6 +13,7 @@ import jwt from "jsonwebtoken";
 // * env
 import "../config/environment.js";
 import { RequestUserType } from "../types/request.js";
+import { HttpError } from "../classes/httpError.js";
 
 export const createUserService = async (data: CreateUserInput) => {
   const validatedData = createUserSchema.safeParse(data);
@@ -101,28 +102,34 @@ export const userLogin = async (
 
 // ? require user auth
 export const requireUserAuthService = async (userToken: string) => {
-  if (!userToken) throw new NotFound("No token was found.");
+  if (!userToken) throw new HttpError("No token was found.", 401);
 
-  const isTokenValid = jwt.verify(
-    userToken,
-    process.env.JWT_SECRET!
-  ) as RequestUserType;
+  try {
+    const isTokenValid = jwt.verify(
+      userToken,
+      process.env.JWT_SECRET!
+    ) as RequestUserType;
 
-  if (!isTokenValid) throw new ValidationError("Token is invalid");
-
-  return {
-    isTokenValid: true,
-    user: isTokenValid,
-  };
+    return {
+      isTokenValid: true,
+      user: isTokenValid,
+    };
+  } catch (error) {
+    throw new HttpError("Token is invalid", 401);
+  }
 };
 
 // * check user
-export const checkUserService = (userToken: string) => {
-  if (!userToken) throw new NotFound("Token not found.");
+export const checkUserService = async (userToken: string) => {
+  if (!userToken) throw new HttpError("Token not found.", 401);
 
-  const decoded = jwt.verify(userToken, process.env.SECRET_TOKEN!, (err) => {
-    if (err) throw new ValidationError("User token was invalid.");
-  });
+  const decoded = await jwt.verify(
+    userToken,
+    process.env.SECRET_TOKEN!,
+    (err) => {
+      if (err) throw new HttpError("User token was invalid.", 401);
+    }
+  );
 
   return { decoded };
 };

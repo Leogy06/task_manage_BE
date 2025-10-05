@@ -84,3 +84,19 @@ export const loggingOutUser = async (
     next(error);
   }
 };
+
+// * check user if login still valid
+export const checkUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.token;
+  try {
+    const decoded = await checkUserService(token);
+
+    res.status(200).json(decoded);
+  } catch (error) {
+    next(error);
+  }
+};
