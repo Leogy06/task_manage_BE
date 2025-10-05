@@ -6,13 +6,8 @@ import {
   userLogin,
 } from "../services/user.js";
 
-// * jwt
-import jwt from "jsonwebtoken";
-
 // env
 import "../config/environment.js";
-import { NewRequest } from "../types/request.js";
-import { ValidationError } from "../utils/errorHandler.js";
 
 export const createUser = async (
   req: Request,
@@ -50,12 +45,13 @@ export const loggingInUser = async (
   next: NextFunction
 ) => {
   try {
-    const loggedInUser = await userLogin(req.body);
+    const token = await userLogin(req.body);
 
-    res.cookie("token", loggedInUser.token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
       maxAge: 2 * 60 * 1000, //1h
     });
     res.status(200).json({
@@ -86,14 +82,14 @@ export const loggingOutUser = async (
 };
 
 // * check user if login still valid
-export const checkUserController = async (
+export const checkUserController = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const token = req.cookies.token;
   try {
-    const decoded = await checkUserService(token);
+    const decoded = checkUserService(token);
 
     res.status(200).json(decoded);
   } catch (error) {

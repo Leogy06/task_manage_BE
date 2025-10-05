@@ -97,7 +97,7 @@ export const userLogin = async (
     }
   );
 
-  return { token };
+  return token;
 };
 
 // ? require user auth
@@ -120,16 +120,14 @@ export const requireUserAuthService = async (userToken: string) => {
 };
 
 // * check user
-export const checkUserService = async (userToken: string) => {
+export const checkUserService = (userToken: string) => {
   if (!userToken) throw new HttpError("Token not found.", 401);
 
-  const decoded = await jwt.verify(
-    userToken,
-    process.env.SECRET_TOKEN!,
-    (err) => {
-      if (err) throw new HttpError("User token was invalid.", 401);
-    }
-  );
+  try {
+    const decoded = jwt.verify(userToken, process.env.JWT_SECRET!);
 
-  return { decoded };
+    return decoded;
+  } catch {
+    throw new HttpError("User token was invalid.", 401);
+  }
 };

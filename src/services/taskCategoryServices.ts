@@ -10,5 +10,5 @@ export const getTraskCategoryServices = async (
     },
   });
 
-  return { taskCategories };
+  return taskCategories;
 };
