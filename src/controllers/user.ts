@@ -50,9 +50,8 @@ export const loggingInUser = async (
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
-      maxAge: 2 * 60 * 1000, //1h
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, //1h
     });
     res.status(200).json({
       message: "Login Successfully",
