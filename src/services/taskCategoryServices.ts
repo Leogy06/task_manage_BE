@@ -14,6 +14,17 @@ export const getTraskCategoryServices = async (
   return taskCategories;
 };
 
+export const getCategoryListService = async (categoryId: string) => {
+  const categoryLists = await prisma.tasks.findMany({
+    where: {
+      category: Number(categoryId),
+      status: 1 | 2,
+    },
+  });
+
+  return categoryLists;
+};
+
 export const createTaskCategoryService = async (
   userId: CreateUserInput["id"],
   description: string
