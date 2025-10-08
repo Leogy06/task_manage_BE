@@ -86,3 +86,37 @@ export const createTaskService = async (data: TaskSchema) => {
 
   return newTask;
 };
+
+// * edit status
+export const editTaskStatusService = async (data: TaskSchema) => {
+  //check if task exist
+  const isTaskExist = await prisma.tasks.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+  if (!isTaskExist) throw new NotFound("Task not found.");
+
+  // ? check if task status exist in task-status db
+  const isTaskStatusExist = await prisma.task_status.findUnique({
+    where: {
+      id: data.status,
+    },
+  });
+
+  if (!isTaskStatusExist) throw new NotFound("Task status is invalid.");
+
+  // ? edit task status
+
+  const updatedTask = await prisma.tasks.update({
+    where: {
+      id: data.id,
+    },
+
+    data: {
+      status: data.status, // new status
+    },
+  });
+
+  return updatedTask;
+};

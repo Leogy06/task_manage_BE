@@ -8,6 +8,7 @@ export const createTaskSchema = z.object({
     .number()
     .nonnegative()
     .min(1, "Category ID of the task is required"),
+  status: z.number().nonnegative().optional(), // status is default by 1 (pending)
 });
 
 export type TaskSchema = z.infer<typeof createTaskSchema>;

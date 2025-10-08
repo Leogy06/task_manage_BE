@@ -2,11 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import {
   createTaskCategoryService,
   createTaskService,
+  editTaskStatusService,
   getCategoryListService,
   getTraskCategoryServices,
 } from "../services/taskCategoryServices.js";
 import { NewRequest } from "../types/request.js";
 
+// * task-category controllers
 export const getTasksCategoriesController = async (
   req: NewRequest,
   res: Response,
@@ -38,6 +40,7 @@ export const createTaskCategoryController = async (
   }
 };
 
+// * tasks controllers
 export const getTasksController = async (
   req: Request,
   res: Response,
@@ -61,6 +64,21 @@ export const createTaskController = async (
     const newTask = await createTaskService(req.body);
 
     res.status(201).json(newTask);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//modify task status
+export const editTaskStatusController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const updatedTask = await editTaskStatusService(req.body);
+
+    res.status(200).json(updatedTask);
   } catch (error) {
     next(error);
   }

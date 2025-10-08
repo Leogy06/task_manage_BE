@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createTaskCategoryController,
   createTaskController,
+  editTaskStatusController,
   getTasksCategoriesController,
   getTasksController,
 } from "../controllers/taskCategoriesController.js";
@@ -18,5 +19,8 @@ taskCategoriesRoutes.post("/", createTaskCategoryController);
 taskCategoriesRoutes.post("/create-task", createTaskController);
 
 taskCategoriesRoutes.get("/get-task/:categoryId", getTasksController);
+
+// ? modify task status
+taskCategoriesRoutes.put("/modify/task-status", editTaskStatusController);
 
 export default taskCategoriesRoutes;
