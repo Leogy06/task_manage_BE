@@ -1,7 +1,11 @@
 import prisma from "../config/prismaConfig.js";
 import { NotFound, ValidationError } from "../utils/errorHandler.js";
 import { CreateUserInput } from "../validations/userSchema.js";
+import { createTaskSchema, TaskSchema } from "../validations/taskSchema.js";
 
+import dayjs from "dayjs";
+
+// * task category
 export const getTraskCategoryServices = async (
   userId: CreateUserInput["id"]
 ) => {
@@ -12,17 +16,6 @@ export const getTraskCategoryServices = async (
   });
 
   return taskCategories;
-};
-
-export const getCategoryListService = async (categoryId: string) => {
-  const categoryLists = await prisma.tasks.findMany({
-    where: {
-      category: Number(categoryId),
-      status: 1 | 2,
-    },
-  });
-
-  return categoryLists;
 };
 
 export const createTaskCategoryService = async (
@@ -52,4 +45,44 @@ export const createTaskCategoryService = async (
   });
 
   return newTaskCategory;
+};
+
+// * tasks
+export const getCategoryListService = async (categoryId: string) => {
+  const categoryLists = await prisma.tasks.findMany({
+    where: {
+      category: Number(categoryId),
+      status: {
+        not: 3,
+      },
+    },
+  });
+
+  return categoryLists;
+};
+
+export const createTaskService = async (data: TaskSchema) => {
+  const validatedData = createTaskSchema.safeParse(data);
+
+  if (!validatedData.success) throw validatedData.error;
+
+  const findCategoryTask = await prisma.tasks_category.findUnique({
+    where: {
+      id: Number(validatedData.data.category),
+    },
+  });
+
+  if (!findCategoryTask) throw new NotFound("Task Category not found.");
+
+  //create the task
+  const newTask = await prisma.tasks.create({
+    data: {
+      category: findCategoryTask.id,
+      name: validatedData.data.name,
+      start_date: new Date(),
+      end_date: dayjs().add(1, "day").format(), // default end date - tommorow of the day it was created.
+    },
+  });
+
+  return newTask;
 };

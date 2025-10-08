@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   createTaskCategoryService,
+  createTaskService,
   getCategoryListService,
   getTraskCategoryServices,
 } from "../services/taskCategoryServices.js";
@@ -37,7 +38,7 @@ export const createTaskCategoryController = async (
   }
 };
 
-export const getCategoryListsController = async (
+export const getTasksController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -46,6 +47,20 @@ export const getCategoryListsController = async (
     const categoryLists = await getCategoryListService(req.params.categoryId);
 
     res.status(200).json(categoryLists);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createTaskController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const newTask = await createTaskService(req.body);
+
+    res.status(201).json(newTask);
   } catch (error) {
     next(error);
   }

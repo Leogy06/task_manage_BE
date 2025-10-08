@@ -1,17 +1,22 @@
 import { Router } from "express";
 import {
   createTaskCategoryController,
-  getCategoryListsController,
+  createTaskController,
   getTasksCategoriesController,
+  getTasksController,
 } from "../controllers/taskCategoriesController.js";
 
 const taskCategoriesRoutes = Router();
 
+//task category
 taskCategoriesRoutes.get("/", getTasksCategoriesController);
 
 //create task category
 taskCategoriesRoutes.post("/", createTaskCategoryController);
 
-taskCategoriesRoutes.get("/get-lists/:categoryId", getCategoryListsController);
+//tasks api
+taskCategoriesRoutes.post("/create-task", createTaskController);
+
+taskCategoriesRoutes.get("/get-task/:categoryId", getTasksController);
 
 export default taskCategoriesRoutes;
