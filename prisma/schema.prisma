@@ -16,7 +16,7 @@ model task_status {
 
 model tasks {
   id             Int            @id @default(autoincrement())
-  name           String         @db.VarChar(36)
+  name           String         @db.VarChar(50)
   description    String?        @db.TinyText
   start_date     DateTime       @db.DateTime(0)
   end_date       DateTime       @db.DateTime(0)
