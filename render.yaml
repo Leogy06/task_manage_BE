@@ -14,4 +14,4 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: my-mysql-db
-          property: connectionString
+          property: connectionString                                                                   
