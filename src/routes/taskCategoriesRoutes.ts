@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  archiveTaskCategoryController,
   createTaskCategoryController,
   createTaskController,
   editTaskStatusController,
@@ -14,6 +15,9 @@ taskCategoriesRoutes.get("/", getTasksCategoriesController);
 
 //create task category
 taskCategoriesRoutes.post("/", createTaskCategoryController);
+
+//delete task category
+taskCategoriesRoutes.delete("/", archiveTaskCategoryController);
 
 //tasks api
 taskCategoriesRoutes.post("/create-task", createTaskController);

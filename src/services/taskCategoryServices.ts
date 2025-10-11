@@ -4,6 +4,7 @@ import { CreateUserInput } from "../validations/userSchema.js";
 import { createTaskSchema, TaskSchema } from "../validations/taskSchema.js";
 
 import dayjs from "dayjs";
+import { TraskCategoryType } from "../validations/taskCategorySchema.js";
 
 // * task category
 export const getTraskCategoryServices = async (
@@ -12,6 +13,7 @@ export const getTraskCategoryServices = async (
   const taskCategories = await prisma.tasks_category.findMany({
     where: {
       user_id: userId,
+      archive: 0,
     },
   });
 
@@ -45,6 +47,25 @@ export const createTaskCategoryService = async (
   });
 
   return newTaskCategory;
+};
+
+//archive task-category
+export const archiveTaskCategoryService = async (
+  userId: CreateUserInput["id"],
+  taskCategoryId: TraskCategoryType["id"]
+) => {
+  if (!userId) throw new ValidationError("User id is required.");
+
+  const archivedTaskCategory = await prisma.tasks_category.update({
+    where: {
+      id: taskCategoryId,
+    },
+    data: {
+      archive: 1, // arhive the task
+    },
+  });
+
+  return archivedTaskCategory;
 };
 
 // * tasks

@@ -35,6 +35,7 @@ model tasks_category {
   description String    @db.VarChar(36)
   created_at  DateTime? @default(dbgenerated("(now())")) @db.DateTime(0)
   user_id     String    @db.VarChar(36)
+  archive     Int?      @default(0) @db.TinyInt
   tasks       tasks[]
   users       users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tasks_category_users")
 

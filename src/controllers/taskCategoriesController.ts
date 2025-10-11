@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  archiveTaskCategoryService,
   createTaskCategoryService,
   createTaskService,
   editTaskStatusService,
@@ -35,6 +36,24 @@ export const createTaskCategoryController = async (
     );
 
     res.status(201).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//archive task catgegory
+export const archiveTaskCategoryController = async (
+  req: NewRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const response = await archiveTaskCategoryService(
+      req.user?.id,
+      req.body.taskCategoryId
+    );
+
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
