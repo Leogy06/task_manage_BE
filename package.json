@@ -7,6 +7,7 @@
     "prisma:generate": "prisma generate",
     "build": "npm run prisma:generate && echo Starting build... && tsc",
     "start": "node dist/index.js",
+    "render-start": "npm run prisma:generate && tsc node dist/index.js",
     "dev": "tsx watch src/index.ts"
   },
   "keywords": [],
