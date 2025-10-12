@@ -19,7 +19,7 @@ model tasks {
   description    String?        @db.TinyText
   start_date     DateTime       @db.DateTime(0)
   end_date       DateTime       @db.DateTime(0)
-  created_at     DateTime?      @default(dbgenerated("(now())")) @db.DateTime(0)
+  created_at     DateTime?      @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   status         Int?           @default(1) @db.TinyInt
   category       Int
   task_status    task_status?   @relation(fields: [status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tasks_task_status")
@@ -32,7 +32,7 @@ model tasks {
 model tasks_category {
   id          Int       @id @default(autoincrement())
   description String    @db.VarChar(36)
-  created_at  DateTime? @default(dbgenerated("(now())")) @db.DateTime(0)
+  created_at  DateTime? @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   user_id     String    @db.VarChar(36)
   archive     Int?      @default(0) @db.TinyInt
   tasks       tasks[]
@@ -47,8 +47,8 @@ model users {
   family_name    String           @db.VarChar(36)
   middle_name    String?          @db.VarChar(20)
   suffix         String?          @db.VarChar(5)
-  created_at     DateTime?        @default(dbgenerated("(now())")) @db.DateTime(0)
-  updated_at     DateTime?        @default(dbgenerated("(now())")) @db.DateTime(0)
+  created_at     DateTime?        @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updated_at     DateTime?        @updatedAt @db.Timestamp(0)
   username       String           @unique @db.VarChar(36)
   password       String           @db.VarChar(60)
   tasks_category tasks_category[]
