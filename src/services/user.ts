@@ -90,6 +90,7 @@ export const userLogin = async (
     {
       id: loggedInUser.id,
       username: loggedInUser.username,
+      given_name: loggedInUser.given_name,
     },
     process.env.JWT_SECRET!,
     {
