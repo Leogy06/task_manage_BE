@@ -13,7 +13,7 @@ const userRoutes = Router();
 userRoutes.post("/", createUser);
 
 //check username availability
-// * this is for creat new account
+// * this is for creat new account (prevent username duplication)
 userRoutes.get("/check-username/:username", checkUsername);
 
 //login user

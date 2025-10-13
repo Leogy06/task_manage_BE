@@ -91,7 +91,7 @@ export const checkUserController = (
   try {
     const decoded = checkUserService(token);
 
-    res.status(200).json(decoded);
+    res.status(200).json({ decoded, isValid: true });
   } catch (error) {
     next(error);
   }
