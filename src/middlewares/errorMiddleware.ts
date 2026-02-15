@@ -7,7 +7,7 @@ export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // http error
   if (err instanceof HttpError) {

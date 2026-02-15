@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.get("/api", requireUserAuthMiddleWare, (req, res) => {
+app.get("/api", (req, res) => {
   res.send("Hello!");
 });
 
@@ -28,7 +28,7 @@ app.use("/api/users", userRoutes);
 app.use(
   "/api/task-categories",
   requireUserAuthMiddleWare,
-  taskCategoriesRoutes
+  taskCategoriesRoutes,
 );
 
 // this should be after all routes to catch errors

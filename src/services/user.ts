@@ -7,6 +7,7 @@ import {
   createUserSchema,
   userLoginValidationSchema,
 } from "../validations/userSchema.js";
+import "dotenv/config";
 
 import jwt from "jsonwebtoken";
 
@@ -63,7 +64,7 @@ export const userLogin = async (
   data: Omit<
     CreateUserInput,
     "given_name" | "family_name" | "middle_name" | "suffix"
-  >
+  >,
 ) => {
   const validatedData = userLoginValidationSchema.safeParse(data);
 
@@ -81,7 +82,7 @@ export const userLogin = async (
 
   const isPasswordMatch = await bcrypt.compare(
     validatedData.data.password,
-    loggedInUser.password
+    loggedInUser.password,
   );
 
   if (!isPasswordMatch) throw new ValidationError("Password does not match.");
@@ -95,7 +96,7 @@ export const userLogin = async (
     process.env.JWT_SECRET!,
     {
       expiresIn: "1h",
-    }
+    },
   );
 
   return token;
@@ -108,7 +109,7 @@ export const requireUserAuthService = async (userToken: string) => {
   try {
     const isTokenValid = jwt.verify(
       userToken,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as RequestUserType;
 
     return {
